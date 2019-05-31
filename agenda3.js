@@ -31,7 +31,33 @@ app.get('/', function(req, res){
 	html += "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>";
 	html += "</head><body>";
 	html += "<div align = 'center' width='50%'>";
-	html += "<form action='inserir' method='post'><br>";
+	
+	html += "<h1>Controle da Agenda de Contatos</h1><br>";
+
+	html += "<form action='clientes' method='get'>";
+	html += "<input class='btn btn-success' type='submit' value='Clientes'>";
+	html += "</form>";
+		
+	html += "<form action='fornecedores' method='get'>";
+	html += "<input class='btn btn-success' type='submit' value='Fornecedores'>";
+	html += "</form>";
+
+	html += "<form action='vendedores' method='get'>";
+	html += "<input class='btn btn-success' type='submit' value='Vendedores'>";
+	html += "</form>";
+
+	html += "</body></html>";
+	res.send(html);
+});
+
+app.get('/clientes', function(req, res){
+	var html;
+	html = "<html><head>";
+	html += "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>";
+	html += "</head><body>";
+	html += "<div align = 'center' width='50%'>";
+	html += "<a href='/'>Voltar</a>";
+	html += "<form action='/clientes/inserir' method='post'><br>";
 	html += "<h1>Controle da Agenda de Clientes</h1><br>";
 	html += " Nome: <input type='text' name='nome' > ";
 	html += " Telefone: <input type='text' name='telefone'> ";
@@ -49,8 +75,10 @@ app.get('/', function(req, res){
 		html += "<tbody>";
 		html += "<td>"+ rows[i].nome + "</td>";
 		html += "<td>"+ rows[i].telefone + "</td>";
-		html += "<td><a href='/" + rows[i].id + "'>Editar</a>";
-		html += "	 <a href='/remover/" + rows[i].id + "'>Remover</a></td>";
+		html += "<td>";
+		html += "<a href='/clientes/" + rows[i].id + "'>Editar</a>  ";
+		html += "<a href='/clientes/remover/" + rows[i].id + "'>Remover</a>";
+		html += "</td>";
 
 		html += "</tbody>";
 	};
@@ -62,7 +90,7 @@ app.get('/', function(req, res){
 });
 
 
-app.post('/inserir', function(req, res){
+app.post('/clientes/inserir', function(req, res){
 	var post = {
         nome: req.body.nome,
         telefone: req.body.telefone
@@ -77,12 +105,12 @@ app.post('/inserir', function(req, res){
 			console.log("Dados inseridos na agenda");
 		}
 	});
-	res.redirect('/');
+	res.redirect('/clientes');
 
 });
 
 
-app.get('/:id', function(req, res) {
+app.get('/clientes/:id', function(req, res) {
 	
 	var id = req.params.id;
 
@@ -97,19 +125,20 @@ app.get('/:id', function(req, res) {
 	html += "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>";
 	html += "</head><body>";
 	html += "<div align = 'center' width='50%'>";
-	html += "<form action='atualizar' method='post'><br>";
+	html += "<form action='/clientes/atualizar' method='post'><br>";
 	html += "<h1>Editando dados na Agenda de Clientes</h1><br>";
 	html += " Nome: <input type='text' name='nome' value='" + nome + "'> ";
 	html += " Telefone: <input type='text' name='telefone' value='" + telefone + "'> ";
 	html += " <input type='hidden' name='id' value='" + id + "'>";
 	html += " <input type='submit' value='Atualizar'>";
+	html += " <input type='button' value='Cancelar' onClick='history.back();'>";
 
 	res.send(html);
 
 });
 
 
-app.post('/atualizar', function(req, res){
+app.post('/clientes/atualizar', function(req, res){
 	var post = {
 	    nome: req.body.nome,
 	    telefone: req.body.telefone
@@ -124,11 +153,11 @@ app.post('/atualizar', function(req, res){
 	        console.log('Registro atualizado com sucesso!');
 	    }
     });
-	res.redirect('/')
+	res.redirect('/clientes')
 });
 
 
-app.get('/remover/:id', function(req, res) {
+app.get('/clientes/remover/:id', function(req, res) {
 	
 	var id = req.params.id;
 
@@ -139,7 +168,7 @@ app.get('/remover/:id', function(req, res) {
 	        console.log('Registro removido com sucesso!');
 	    }
     });
-	res.redirect('/')
+	res.redirect('/clientes')
 });
 
 
